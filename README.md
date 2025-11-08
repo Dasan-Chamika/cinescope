@@ -1,4 +1,8 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CineScope Movie Dashboard
+
+## App Theme
+
+- Primary Color: #1dd1a1
 
 ## Getting Started
 

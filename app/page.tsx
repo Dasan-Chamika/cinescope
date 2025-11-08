@@ -1,7 +1,7 @@
 // RSC - React Server Component
 // SSR - Enabled by default import MainNav from "@/components/main-nav";
 
-import MainNav from "@/components/main-nav";
+import { MainNav } from "@/components/main-nav";
 import Image from "next/image";
 import Link from "next/link";
 export default function HomePage() {

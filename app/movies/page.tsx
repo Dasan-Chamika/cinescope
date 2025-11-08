@@ -1,6 +1,6 @@
 // RSC - React Server Component
+import { MainNav } from "@/components/main-nav";
 import Link from "next/link";
-import MainNav from "@/components/main-nav";
 
 // SSR - Enabled by default
 export default function MoviesPage() {

@@ -2,11 +2,11 @@ import Link from "next/link";
 import { Logo } from "./logo";
 import { ModeToggle } from "./mode-toggle";
 
-export default function MainNav() {
+export function MainNav() {
   return (
     <header className="border-b border-primary/20 bg-background sticky top-0 z-50 w-full">
       <div className="container mx-auto max-w-[87.5rem] px-8 flex h-16 items-center ">
-        <Link href="/" className=" flex items-center gap-1">
+        <Link href="/" className=" flex items-center gap-2">
           <Logo />
           <span className="text-primary text-xl font-bold">CineScope</span>
         </Link>
