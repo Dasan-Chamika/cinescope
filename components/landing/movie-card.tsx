@@ -35,8 +35,11 @@ export default function MovieCard({ movie }: MovieCardProps) {
       </div>
 
       <CardContent className="p-4">
-        <h3 className="line-clamp-1 font-semibold">{movie.title}</h3>
-        <p className="text-muted-foreground text-sm">{movie.releaseYear}</p>
+        <h3 className="line-clamp-1 font-semibold">{movie.title}</h3>{" "}
+        {/* If the title length is more than one line, the line-clamp-1 class will force it to stay in a single row. */}
+        <p className="text-muted-foreground text-sm">
+          {movie.releaseYear} &#8226; {movie.genre} &#8226; ⭐ {movie.rating}
+        </p>
       </CardContent>
     </Card>
   );
