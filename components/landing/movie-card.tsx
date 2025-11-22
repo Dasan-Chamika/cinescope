@@ -11,12 +11,14 @@ import Image from "next/image";
 
 type MovieCardProps = {
   movie: {
-    id: number;
+    _id: string;
     title: string;
-    genre: string;
-    releaseYear: number;
-    rating: number;
-    posterUrl?: string;
+    genres: string[];
+    year: number;
+    imdb: {
+      rating: number;
+    };
+    poster?: string;
   };
 };
 
@@ -25,7 +27,7 @@ export default function MovieCard({ movie }: MovieCardProps) {
     <Card className="border-primary/20 hover:border-primary/50 overflow-hidden py-0 gap-0 transition-colors">
       <div className=" aspect-2/3 w-full overflow-hidden">
         <Image
-          src={movie?.posterUrl || "/placeholder.svg"}
+          src={movie?.poster || "/placeholder.svg"}
           alt={movie.title}
           width={300}
           height={450}
@@ -35,10 +37,11 @@ export default function MovieCard({ movie }: MovieCardProps) {
       </div>
 
       <CardContent className="p-4">
-        <h3 className="line-clamp-1 font-semibold">{movie.title}</h3>{" "}
+        <h3 className="line-clamp-1 font-semibold">{movie.title}</h3>
         {/* If the title length is more than one line, the line-clamp-1 class will force it to stay in a single row. */}
         <p className="text-muted-foreground text-sm">
-          {movie.releaseYear} &#8226; {movie.genre} &#8226; ⭐ {movie.rating}
+          {movie.year} &#8226; {movie.genres.join(", ")} &#8226; ⭐{" "}
+          {movie.imdb.rating}
         </p>
       </CardContent>
     </Card>

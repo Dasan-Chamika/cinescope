@@ -21,9 +21,6 @@ export default function FeaturedMovies() {
         <Button variant="outline">View All</Button>
       </div>
 
-      {/* Movie Search */}
-      <div className=" w-full h-[122px] bg-purple-400 rounded-lg mb-6"></div>
-
       <MoviesList />
     </section>
   );
