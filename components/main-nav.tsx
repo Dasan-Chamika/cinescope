@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Logo } from "./logo";
+import { Logo } from "@/components/shared/logo";
 import { ModeToggle } from "./mode-toggle";
 
 export function MainNav() {
@@ -11,7 +11,7 @@ export function MainNav() {
           <span className="text-primary text-xl font-bold">CineScope</span>
         </Link>
 
-        <nav className="ml-auto flex items-center gap-4">
+        <nav className="ml-auto flex items-center gap-4 font-medium">
           <Link href="/movies">Movies</Link>
           <Link href="/genres">Genres</Link>
           <Link href="/about">About</Link>
