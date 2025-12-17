@@ -1,4 +1,4 @@
-import { LoginForm } from "@/components/login-form"
+import { LoginForm } from "@/components/login-form";
 
 // React Server Component
 export default function Page() {
@@ -8,5 +8,5 @@ export default function Page() {
         <LoginForm />
       </div>
     </div>
-  )
+  );
 }

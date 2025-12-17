@@ -18,13 +18,15 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { registerUser } from "@/actions/auth";
 
 export function RegisterForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const [state, formAction, isPending] = useActionState(registerUser, null);
+  const [state, formAction, isPending] = useActionState(loginUser, {
+    success: null,
+    message: null,
+  });
   console.log("Registration state", state, "isPending", isPending);
 
   return (
