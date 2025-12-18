@@ -8,13 +8,37 @@ export const registerUser = async (_: unknown, formData: FormData) => {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
 
+    if (!name) {
+      return {
+        success: false,
+        message: "Name is required",
+        field: "name",
+      };
+    }
+
+    if (!email) {
+      return {
+        success: false,
+        message: "Email is required",
+        field: "email",
+      };
+    }
+
+    if (!password) {
+      return {
+        success: false,
+        message: "Password is required",
+        field: "password",
+      };
+    }
+
     try {
       const { data, error } = await signUp.email(
         {
           email,
           password,
           name,
-          image: "string | undefined",
+          image: null,
           callbackURL: "/dashboard",
         },
         {
@@ -27,9 +51,18 @@ export const registerUser = async (_: unknown, formData: FormData) => {
         }
       );
 
-      return { data, error };
+      return {
+        success: !error,
+        message: error ? error.message : "Registration successful",
+        field: error && "general",
+      };
     } catch (error) {
       console.error("Error registering user : ", error);
+
+      return {
+        success: false,
+        message: "Registration failed",
+      };
     }
   }
 };
@@ -39,6 +72,21 @@ export const loginUser = async (_: unknown, formData: FormData) => {
   if (formData) {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
+
+    if (!email) {
+      return {
+        success: false,
+        message: "Email is required",
+        field: "email",
+      };
+    }
+    if (!password) {
+      return {
+        success: false,
+        message: "Password is required",
+        field: "password",
+      };
+    }
 
     try {
       const { error } = await signIn.email(
@@ -61,6 +109,7 @@ export const loginUser = async (_: unknown, formData: FormData) => {
       return {
         success: !error,
         message: error ? error.message : "Login successful",
+        field: error && "general",
       };
     } catch (error) {
       console.error("Error logging in user:", error);

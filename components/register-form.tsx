@@ -1,6 +1,7 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -14,20 +15,32 @@ import {
 import {
   Field,
   FieldDescription,
+  FieldError,
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { registerUser } from "@/actions/auth";
 
 export function RegisterForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const [state, formAction, isPending] = useActionState(loginUser, {
+  const router = useRouter();
+
+  const [state, formAction, isPending] = useActionState(registerUser, {
     success: null,
     message: null,
+    field: null,
   });
   console.log("Registration state", state, "isPending", isPending);
+
+  useEffect(() => {
+    if (state?.success) {
+      // Redirect to dashboard on successful login
+      router.push("/dashboard");
+    }
+  });
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -50,8 +63,10 @@ export function RegisterForm({
                   name="name"
                   type="text"
                   placeholder="John Doe"
-                  required
                 />
+                <FieldError className=" text-xs">
+                  {state?.field === "name" ? state.message : null}
+                </FieldError>
               </Field>
               <Field>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
@@ -60,14 +75,22 @@ export function RegisterForm({
                   name="email"
                   type="email"
                   placeholder="john.doe@email.com"
-                  required
                 />
+                <FieldError className=" text-xs">
+                  {state?.field === "email" ? state.message : null}
+                </FieldError>
               </Field>
               <Field>
                 <FieldLabel htmlFor="password">Password</FieldLabel>
-                <Input id="password" name="password" type="password" required />
+                <Input id="password" name="password" type="password" />
+                <FieldError className=" text-xs">
+                  {state?.field === "password" ? state.message : null}
+                </FieldError>
               </Field>
               <Field>
+                <FieldError className=" text-xs text-center">
+                  {state?.field === "general" ? state.message : null}
+                </FieldError>
                 <Button
                   type="submit"
                   className=" cursor-pointer"

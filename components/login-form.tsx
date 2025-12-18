@@ -1,6 +1,7 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -14,6 +15,7 @@ import {
 import {
   Field,
   FieldDescription,
+  FieldError,
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
@@ -24,11 +26,21 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const router = useRouter();
+
   const [state, formAction, isPending] = useActionState(loginUser, {
     success: null,
     message: null,
+    field: null,
   });
   console.log("Registration state", state, "isPending", isPending);
+
+  useEffect(() => {
+    if (state?.success) {
+      // Redirect to dashboard on successful login
+      router.push("/dashboard");
+    }
+  });
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -49,8 +61,10 @@ export function LoginForm({
                   type="email"
                   name="email"
                   placeholder="john.doe@email.com"
-                  required
                 />
+                <FieldError className=" text-xs">
+                  {state?.field === "email" ? state.message : null}
+                </FieldError>
               </Field>
               <Field>
                 <div className="flex items-center">
@@ -62,9 +76,15 @@ export function LoginForm({
                     Forgot your password?
                   </a>
                 </div>
-                <Input id="password" type="password" name="password" required />
+                <Input id="password" type="password" name="password" />
+                <FieldError className=" text-xs">
+                  {state?.field === "password" ? state.message : null}
+                </FieldError>
               </Field>
               <Field>
+                <FieldError className=" text-xs text-center">
+                  {state?.field === "general" ? state.message : null}
+                </FieldError>
                 <Button type="submit" disabled={isPending}>
                   {isPending ? "Signing In" : "Sign In"}
                 </Button>
