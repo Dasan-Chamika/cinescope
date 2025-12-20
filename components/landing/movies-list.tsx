@@ -1,7 +1,9 @@
 import { getMovies } from "@/actions/movies";
-import MovieCard from "./movie-card";
+import MovieCard, { MovieCardSkeleton } from "./movie-card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default async function MoviesList() {
+  await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulated delay
   const movies = await getMovies();
   console.log("Fetched Movies", movies, typeof movies);
 
@@ -14,10 +16,7 @@ export default async function MoviesList() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Movie Search Filter */}
-      <div className=" w-full h-[122px] bg-purple-400 rounded-lg mb-6"></div>
-
+    <>
       <div className="text-muted-foreground text-sm">
         Showing {movies.length} of 100 movies
       </div>
@@ -27,6 +26,21 @@ export default async function MoviesList() {
           <MovieCard key={movie._id} movie={movie} />
         ))}
       </div>
-    </div>
+    </>
+  );
+}
+
+export function MoviesListSkeleton() {
+  return (
+    <>
+      <Skeleton className=" h-4 w-45" />
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {Array(8)
+          .fill(0)
+          .map((_, i) => (
+            <MovieCardSkeleton key={i} />
+          ))}
+      </div>
+    </>
   );
 }

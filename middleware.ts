@@ -1,17 +1,15 @@
 import { NextResponse, NextRequest } from "next/server";
-import { getSession } from "@/lib/auth-client";
 import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 
 export async function middleware(request: NextRequest) {
-  const sessionCookie = await getSession({
-    fetchOptions: {
-      headers: await headers(),
-    },
+  const session = await auth.api.getSession({
+    headers: await headers(),
   });
 
-  console.log("SESSION::", sessionCookie);
+  console.log("SESSION::", session);
 
-  if (!sessionCookie) {
+  if (!session) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
@@ -19,8 +17,8 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
+  runtime: "nodejs", // Node.js runtime for better auth compatibility
   matcher: ["/dashboard/:path*", "/profile/:path*"],
-  runtime: "nodejs",
 };
 
 // middleware is in between client and server

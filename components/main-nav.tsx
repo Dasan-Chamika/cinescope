@@ -15,7 +15,7 @@ export function MainNav() {
           <Link href="/movies">Movies</Link>
           <Link href="/genres">Genres</Link>
           <Link href="/about">About</Link>
-          <Link href="/admin">Admin</Link>
+          <Link href="/dashboard">Admin</Link>
           <ModeToggle />
         </nav>
       </div>

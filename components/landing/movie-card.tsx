@@ -12,6 +12,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type MovieCardProps = {
   movie: {
@@ -88,5 +89,29 @@ export default function MovieCard({ movie }: MovieCardProps) {
         </Button>
       </CardFooter>
     </Card>
+  );
+}
+
+export function MovieCardSkeleton() {
+  return (
+    <div className=" overflow-hidden rounded-lg">
+      <Skeleton className=" aspect-2/3 w-full"></Skeleton>
+      <div className=" p-4">
+        <div className=" space-y-2">
+          <Skeleton className=" h-4 w-3/4" />
+          <Skeleton className=" h-4 w-1/2" />
+        </div>
+
+        <div className=" flex mt-3 gap-1">
+          <Skeleton className=" h-5 w-1/5" />
+          <Skeleton className=" h-5 w-1/5" />
+        </div>
+
+        <div className=" flex justify-between gap-2 mt-6">
+          <Skeleton className=" h-6 w-16 rounded-full" />
+          <Skeleton className=" h-6 w-16 rounded-full" />
+        </div>
+      </div>
+    </div>
   );
 }

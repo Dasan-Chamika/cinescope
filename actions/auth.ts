@@ -1,6 +1,6 @@
 "use server";
 
-import { signUp, signIn, signOut } from "@/lib/auth-client";
+import { auth } from "@/lib/auth";
 
 export const registerUser = async (_: unknown, formData: FormData) => {
   if (formData) {
@@ -33,35 +33,24 @@ export const registerUser = async (_: unknown, formData: FormData) => {
     }
 
     try {
-      const { data, error } = await signUp.email(
-        {
-          email,
-          password,
-          name,
-          image: null,
-          callbackURL: "/dashboard",
-        },
-        {
-          onSuccess: (ctx) => {
-            console.log("Registration successful", ctx);
-          },
-          onError: (ctx) => {
-            console.log("Registration error", ctx.error);
-          },
-        }
-      );
+      const response = await auth.api.signUpEmail({
+        body: { email, password, name, image: null },
+      });
+
+      console.log("Registration response:", response);
 
       return {
-        success: !error,
-        message: error ? error.message : "Registration successful",
-        field: error && "general",
+        success: true,
+        message: "User registered successfully.",
+        field: "general",
       };
     } catch (error) {
-      console.error("Error registering user : ", error);
+      console.error("Error registering user:", error.message);
 
       return {
         success: false,
-        message: "Registration failed",
+        message: error.message || "User registration failed.",
+        field: "general",
       };
     }
   }
@@ -89,34 +78,24 @@ export const loginUser = async (_: unknown, formData: FormData) => {
     }
 
     try {
-      const { error } = await signIn.email(
-        {
-          email,
-          password,
-          rememberMe: true,
-          callbackURL: "/dashboard",
-        },
-        {
-          onSuccess: () => {
-            console.log("User Logged in Successfully");
-          },
-          onError: (ctx) => {
-            console.error("Login error:", ctx.error);
-          },
-        }
-      );
+      const response = await auth.api.signInEmail({
+        body: { email, password, rememberMe: true },
+      });
+
+      console.log("Login response:", response);
 
       return {
-        success: !error,
-        message: error ? error.message : "Login successful",
-        field: error && "general",
+        success: true,
+        message: "User logged in successfully.",
+        field: "general",
       };
     } catch (error) {
       console.error("Error logging in user:", error);
 
       return {
         success: false,
-        message: "Login failed",
+        message: error.message || "Login failed.",
+        field: "general",
       };
     }
   }
@@ -124,13 +103,11 @@ export const loginUser = async (_: unknown, formData: FormData) => {
 
 export const logoutUser = async () => {
   try {
-    await signOut({
-      fetchOptions: {
-        onSuccess: () => {
-          console.log("User logged out successfully");
-        },
-      },
-    });
+    const response = await auth.api.signOut();
+
+    console.log("Logout response:", response);
+
+    return { success: true, message: "User logged out successfully." };
   } catch (error) {
     console.error("Error logging out user:", error);
     return {

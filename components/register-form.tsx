@@ -36,11 +36,14 @@ export function RegisterForm({
   console.log("Registration state", state, "isPending", isPending);
 
   useEffect(() => {
-    if (state?.success) {
-      // Redirect to dashboard on successful login
-      router.push("/dashboard");
+    if (state) {
+      if (state.success) {
+        router.push("/dashboard");
+      } else {
+        // console.error("Login failed:", state.message);
+      }
     }
-  });
+  }, [router, state]);
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -88,7 +91,12 @@ export function RegisterForm({
                 </FieldError>
               </Field>
               <Field>
-                <FieldError className=" text-xs text-center">
+                <FieldError
+                  className={cn(
+                    " text-xs text-center",
+                    state?.success ? "text-green-600" : "text-red-600"
+                  )}
+                >
                   {state?.field === "general" ? state.message : null}
                 </FieldError>
                 <Button
