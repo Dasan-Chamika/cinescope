@@ -1,3 +1,5 @@
+import UserNav from "@/components/dashboard/user-nav";
+
 export default function AdminHeader() {
   return (
     <header className=" sticky top-0 z-50 bg-background border-b">
@@ -5,7 +7,7 @@ export default function AdminHeader() {
         <h1 className=" text-xl font-bold ">Admin Dashboard</h1>
 
         {/* User Navigation */}
-        <div className=" w-8 h-8 rounded-full bg-green-400"></div>
+        <UserNav />
       </div>
     </header>
   );
