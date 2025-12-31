@@ -1,4 +1,17 @@
 import UserNav from "@/components/dashboard/user-nav";
+import { auth } from "@/lib/auth";
+import { redirect } from "next/navigation";
+import { headers } from "next/headers";
+
+const handleLogout = async () => {
+  "use server";
+
+  await auth.api.signOut({
+    headers: await headers(),
+  });
+
+  redirect("/login");
+};
 
 export default function AdminHeader() {
   return (
@@ -7,7 +20,7 @@ export default function AdminHeader() {
         <h1 className=" text-xl font-bold ">Admin Dashboard</h1>
 
         {/* User Navigation */}
-        <UserNav />
+        <UserNav handleLogout={handleLogout} />
       </div>
     </header>
   );

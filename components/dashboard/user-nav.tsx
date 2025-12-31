@@ -12,11 +12,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-export default function UserNav() {
-  const handleLogout = (): void => {
-    console.log("LogOut");
-  };
+type userNavProps = {
+  handleLogout: () => void;
+};
 
+export default function UserNav({ handleLogout }: userNavProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className=" focus-visible:ring-0!" asChild>
