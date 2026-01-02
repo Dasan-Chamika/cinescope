@@ -14,9 +14,18 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 type userNavProps = {
   handleLogout: () => void;
+  user: {
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    email: string;
+    emailVerified: boolean;
+    name: string;
+    image?: string | null | undefined;
+  };
 };
 
-export default function UserNav({ handleLogout }: userNavProps) {
+export default function UserNav({ handleLogout, user }: userNavProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className=" focus-visible:ring-0!" asChild>
@@ -28,9 +37,11 @@ export default function UserNav({ handleLogout }: userNavProps) {
       <DropdownMenuContent className=" w-56" align="end" forceMount>
         <DropdownMenuLabel>
           <div className=" flex flex-col space-y-1">
-            <p>Admin User</p>
+            <p className=" text-sm font-medium leading-none text-nowrap truncate">
+              {user.name !== "" ? user.name : "Guest user"}
+            </p>
             <p className=" text-muted-foreground text-xs leading-none">
-              dasanchamika@gmail.com
+              {user.email !== "" ? user.email : "No email address"}
             </p>
           </div>
         </DropdownMenuLabel>
