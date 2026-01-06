@@ -1,3 +1,7 @@
+"use client";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
 import {
   HomeIcon,
   FilmIcon,
@@ -22,7 +26,6 @@ import {
 } from "@/components/ui/sidebar";
 import { Logo } from "@/components/shared/logo";
 import { ModeToggle } from "@/components/mode-toggle";
-import Link from "next/link";
 
 const menuItems = [
   { title: "Dashboard", href: "/dashboard", icon: HomeIcon, exact: true },
@@ -38,9 +41,16 @@ const accountItems = [
 ];
 
 export default function AdminSidebar() {
+  const pathname = usePathname();
+
   const isActive = (item: { href: string; exact?: boolean }) => {
     if (item.exact) {
+      return pathname === item.href;
     }
+    if (item.href === "/") {
+      return pathname === "/";
+    }
+    return pathname.startsWith(item.href);
   };
 
   return (
@@ -49,7 +59,7 @@ export default function AdminSidebar() {
       className=" bg-primary/5 border-r bor-primary/20"
     >
       {/* Header with Logo */}
-      <SidebarHeader>
+      <SidebarHeader className=" bg-primary/5">
         <div className=" flex items-center p-2">
           <Logo />
           <h2 className="ml-2 text-xl font-bold">CineScope</h2>
@@ -58,7 +68,7 @@ export default function AdminSidebar() {
           </div>
         </div>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className=" bg-primary/5">
         {/* Menu */}
         <SidebarGroup>
           <SidebarGroupLabel>Menu</SidebarGroupLabel>
@@ -66,9 +76,41 @@ export default function AdminSidebar() {
             <SidebarMenu>
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton
+                    className={
+                      isActive(item)
+                        ? " bg-primary text-white font-medium hover:bg-primary/90 hover:text-white"
+                        : "hover:bg-primary/10"
+                    }
+                    asChild
+                  >
                     <Link href={item.href}>
-                      <item.icon />
+                      <item.icon className=" size-4" />
+                      <span>{item.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        {/* Account */}
+        <SidebarGroup>
+          <SidebarGroupLabel>Account</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {accountItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton
+                    className={
+                      isActive(item)
+                        ? " bg-primary text-white font-medium hover:bg-primary/90 hover:text-white"
+                        : "hover:bg-primary/10"
+                    }
+                    asChild
+                  >
+                    <Link href={item.href}>
+                      <item.icon className=" size-4" />
                       <span>{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
