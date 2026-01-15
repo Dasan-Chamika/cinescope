@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import MovieSelectors from "./movie-selectors";
-import MoviesData from "./movies.data";
+import MovieData from "./movie-data";
 
 export default function MoviesDashboardPage() {
   return (
@@ -22,7 +22,7 @@ export default function MoviesDashboardPage() {
       <MovieSelectors />
 
       {/* Movie data Table */}
-      <MoviesData />
+      <MovieData />
     </div>
   );
 }
