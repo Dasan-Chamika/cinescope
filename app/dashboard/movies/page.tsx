@@ -1,7 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { PlusIcon } from "lucide-react";
 import MovieSelectors from "./movie-selectors";
 import MovieData from "./movie-data";
+import AddMovieDialog from "@/components/dashboard/add-movie-dialog";
 
 export default function MoviesDashboardPage() {
   return (
@@ -12,10 +11,7 @@ export default function MoviesDashboardPage() {
           <p className=" text-muted-foreground">Manage your movie catalog</p>
         </div>
 
-        <Button>
-          <PlusIcon className="mr-2 h-4 w-4" />
-          Add Movie
-        </Button>
+        <AddMovieDialog />
       </div>
 
       {/* Movie Selectors */}
