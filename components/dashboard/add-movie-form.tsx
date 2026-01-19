@@ -21,8 +21,15 @@ export default function AddMovieForm() {
   const genres = getAllGenres();
   const statuses = getAllStatuses();
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData.entries());
+    console.log(data);
+  };
+
   return (
-    <form className=" space-y-4">
+    <form className=" space-y-4" onSubmit={handleSubmit}>
       <div className="grid grid-cols-2 gap-4">
         <div className=" space-y-2">
           <Label htmlFor="title">
