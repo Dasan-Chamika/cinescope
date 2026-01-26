@@ -5,7 +5,7 @@ import { Input } from "../ui/input";
 import {
   Select,
   SelectContent,
-  SelectGroup,
+  // SelectGroup,
   SelectItem,
   //   SelectLabel,
   SelectTrigger,
@@ -15,6 +15,8 @@ import { getAllGenres, getAllStatuses, getAllYears } from "@/lib/utils";
 import { Textarea } from "../ui/textarea";
 import { DialogFooter } from "../ui/dialog";
 import { Button } from "../ui/button";
+import { createMovie } from "@/actions/movies";
+import { WithoutId, Document } from "mongodb";
 
 export default function AddMovieForm() {
   const years = getAllYears();
@@ -24,8 +26,30 @@ export default function AddMovieForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData.entries());
-    console.log(data);
+
+    const movie: WithoutId<Document> = {
+      title: formData.get("title"),
+      year: formData.get("year"),
+      directors: [formData.get("director")],
+      genres: [formData.get("genre")],
+      imdb: { rating: Number(formData.get("rating")) },
+      runtime: formData.get("runtime"),
+      plot: formData.get("overview"),
+      poster: formData.get("poster"),
+      backdrop: formData.get("backdrop"),
+      status: formData.get("status"),
+      lastUpdated: new Date().toISOString(),
+    };
+
+    try {
+      const response = await createMovie(movie);
+
+      if (response.success) {
+        //
+      }
+    } catch (error) {
+      //
+    }
   };
 
   return (

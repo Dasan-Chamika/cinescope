@@ -1,6 +1,7 @@
 "use server";
 
 import { db } from "@/db";
+import { WithoutId, Document } from "mongodb";
 
 // get a  list of movies from db
 export async function getMovies() {
@@ -13,7 +14,7 @@ export async function getMovies() {
           "Content-Type": "application/json",
         },
         cache: "no-store",
-      }
+      },
     );
 
     if (!moviesResponse.ok) {
@@ -59,6 +60,30 @@ export async function searchMovies(query: string) {
       success: false,
       message: "An error occurred while searching for movies.",
       data: [],
+    };
+  }
+}
+
+export async function createMovie(movie: WithoutId<Document>) {
+  try {
+    const result = await db.collection("movies_new").insertOne(movie);
+
+    if (result.acknowledged) {
+      return {
+        success: true,
+        message: "Movie created successfully",
+      };
+    } else {
+      return {
+        success: false,
+        message: "Failed to create movie",
+      };
+    }
+  } catch (error) {
+    console.log("MongoDB insert error:", error);
+    return {
+      success: false,
+      message: "An error occurred while creating the movie",
     };
   }
 }
