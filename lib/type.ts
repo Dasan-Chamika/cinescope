@@ -1,11 +1,18 @@
 export type Movie = {
-  id: number;
+  id: string;
   title: string;
   year: number;
+  plot: string;
+  rated: string;
+  runtime: number;
   genres: string[];
-  imdb: {
-    rating: number;
-  };
   status: string;
-  poster?: string;
+  poster: string;
+  backdrop: string;
+  directors: string;
+  imdb: {
+    id: string;
+    rating: number;
+    votes: number;
+  };
 };

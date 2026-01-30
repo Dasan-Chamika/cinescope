@@ -31,7 +31,7 @@ export default function AddMovieDialog() {
             Fill in the details below to add a new movie to your catalog.
           </DialogDescription>
         </DialogHeader>
-        <AddMovieForm />
+        <AddMovieForm showDialog={setShowAddMovieDialog} />
       </DialogContent>
     </Dialog>
   );

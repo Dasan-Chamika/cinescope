@@ -18,18 +18,47 @@ import { Textarea } from "../ui/textarea";
 import { DialogFooter } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { createMovie } from "@/actions/movies";
-import { WithoutId, Document } from "mongodb";
+import { WithId, WithoutId, Document } from "mongodb";
+import { title } from "process";
 
-type AddMovieFormProps = {
+type UpdateMovieFormProps = {
   showDialog: (value: boolean) => void;
+  movie?: WithId<Document>;
 };
 
-export default function AddMovieForm({ showDialog }: AddMovieFormProps) {
+export default function UpdateMovieForm({
+  showDialog,
+  movie,
+}: UpdateMovieFormProps) {
+  console.log("Movie", movie);
+
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formState, setFormState] = useState({
+    title: movie?.title || "",
+    year: movie?.year || "",
+    director: movie?.directors?.at(0) || "",
+    genre: movie?.genres?.at(0) || "",
+    rating: movie?.imdb?.rating || "",
+    runtime: movie?.runtime || "",
+    overview: movie?.plot || "",
+    poster: movie?.poster || "",
+    backdrop: movie?.backdrop || "",
+    status: movie?.status || "",
+  });
+  console.log("state", formState);
   const years = getAllYears();
   const genres = getAllGenres();
   const statuses = getAllStatuses();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const target = e.target;
+    const { name, value } = target;
+    setFormState((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -77,6 +106,8 @@ export default function AddMovieForm({ showDialog }: AddMovieFormProps) {
             name="title"
             type="text"
             placeholder="Movie title"
+            value={formState.title}
+            onChange={handleChange}
             required
           />
         </div>
@@ -84,7 +115,14 @@ export default function AddMovieForm({ showDialog }: AddMovieFormProps) {
           <Label htmlFor="year">
             Year <span className="text-red-500">*</span>
           </Label>
-          <Select name="year" required>
+          <Select
+            name="year"
+            required
+            onValueChange={(value) =>
+              setFormState((prev) => ({ ...prev, year: value }))
+            }
+            value={formState.year}
+          >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Please select year" />
             </SelectTrigger>
@@ -104,13 +142,22 @@ export default function AddMovieForm({ showDialog }: AddMovieFormProps) {
             name="director"
             type="text"
             placeholder="Movie director"
+            value={formState.director}
+            onChange={handleChange}
           />
         </div>
         <div className=" space-y-2">
           <Label htmlFor="genre">
             Genre <span className="text-red-500">*</span>
           </Label>
-          <Select name="genre" required>
+          <Select
+            name="genre"
+            required
+            onValueChange={(value) =>
+              setFormState((prev) => ({ ...prev, genre: value }))
+            }
+            value={formState.genre}
+          >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Please select genre" />
             </SelectTrigger>
@@ -135,6 +182,8 @@ export default function AddMovieForm({ showDialog }: AddMovieFormProps) {
             min="0"
             max="10"
             placeholder="IMDB Rating (0-10)"
+            value={formState.rating}
+            onChange={handleChange}
             required
           />
         </div>
@@ -150,6 +199,8 @@ export default function AddMovieForm({ showDialog }: AddMovieFormProps) {
             min="0"
             max="1000"
             placeholder="Runtime in minutes"
+            value={formState.runtime}
+            onChange={handleChange}
             required
           />
         </div>
@@ -161,6 +212,8 @@ export default function AddMovieForm({ showDialog }: AddMovieFormProps) {
           id="description"
           name="description"
           placeholder="Movie description"
+          value={formState.overview}
+          onChange={handleChange}
           className=" h-[6.25rem]"
         />
       </div>
@@ -175,6 +228,8 @@ export default function AddMovieForm({ showDialog }: AddMovieFormProps) {
             name="poster"
             type="url"
             placeholder="URL to movie poster image"
+            value={formState.poster}
+            onChange={handleChange}
           />
         </div>
         <div className=" space-y-2">
@@ -186,6 +241,8 @@ export default function AddMovieForm({ showDialog }: AddMovieFormProps) {
             name="backdrop"
             type="url"
             placeholder="URL to movie backdrop image"
+            value={formState.backdrop}
+            onChange={handleChange}
             required
           />
         </div>
@@ -193,7 +250,14 @@ export default function AddMovieForm({ showDialog }: AddMovieFormProps) {
           <Label htmlFor="status">
             Status <span className="text-red-500">*</span>
           </Label>
-          <Select name="status" required>
+          <Select
+            name="status"
+            required
+            onValueChange={(value) =>
+              setFormState((prev) => ({ ...prev, status: value }))
+            }
+            value={formState.status}
+          >
             <SelectTrigger className="w-full capitalize">
               <SelectValue placeholder="Please select status" />
             </SelectTrigger>
@@ -227,7 +291,7 @@ export default function AddMovieForm({ showDialog }: AddMovieFormProps) {
           className="min-w-[6.375rem]"
           disabled={isSubmitting}
         >
-          {isSubmitting ? "Adding..." : "Add Movie"}
+          {isSubmitting ? "Updating..." : "Update Movie"}
         </Button>
       </DialogFooter>
     </form>

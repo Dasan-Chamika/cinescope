@@ -36,7 +36,7 @@ export async function getMovies() {
 export async function searchMovies(query: string) {
   try {
     const movies = await db
-      .collection("movies")
+      .collection("movies_new")
       .find({ title: { $regex: query, $options: "i" } }) // case-insensitive search
       .limit(50)
       .toArray();

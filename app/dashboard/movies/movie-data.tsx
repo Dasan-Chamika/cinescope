@@ -9,8 +9,23 @@ export default async function MovieData() {
 
     if (!success) throw new Error("No movies found in the database.");
 
-    return <MoviesTable movies={data} />;
-  } catch (error) {
+    const refinedData = data.map((movie) => ({
+      id: movie._id.toString(),
+      title: movie.title,
+      year: movie.year,
+      plot: movie.plot,
+      rated: movie.rated,
+      genres: movie.genres,
+      poster: movie.poster,
+      backdrop: movie.backdrop,
+      imdb: movie.imdb,
+      runtime: movie.runtime,
+      status: movie.status ?? "published",
+      directors: movie.directors,
+    }));
+
+    return <MoviesTable movies={refinedData} />;
+  } catch {
     return <div>No Movies Available!</div>;
   }
 }
