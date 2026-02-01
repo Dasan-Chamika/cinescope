@@ -1,5 +1,6 @@
 "use client";
-
+import { useSearchParams, usePathname, useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -14,11 +15,40 @@ import {
 import { SearchIcon, SlidersHorizontalIcon } from "lucide-react";
 
 export default function MovieSelectors() {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+  const isFirstRender = useRef(true);
+
+  const initialQuery = searchParams.get("q") || "";
+  const [searchTerm, setSearchTerm] = useState(initialQuery);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    const params = new URLSearchParams(searchParams.toString());
+    if (searchTerm) {
+      params.set("q", searchTerm);
+    } else {
+      params.delete("q");
+    }
+
+    router.replace(`${pathname}?${params.toString()}`);
+  }, [searchTerm, searchParams, pathname, router]);
+
   return (
     <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
       <div className="flex w-full items-center space-x-2 md:w-1/2">
         <SearchIcon className=" h-4 w-4 text-muted-foreground" />
-        <Input placeholder="Search movies.." className="h-9" />
+        <Input
+          placeholder="Search movies.."
+          className="h-9"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
       </div>
       <div className="flex items-center gap-2">
         <Select>

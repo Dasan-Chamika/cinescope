@@ -1,5 +1,6 @@
 "use server";
 
+import { ObjectId } from "mongodb";
 import { db } from "@/db";
 import { WithoutId, Document } from "mongodb";
 
@@ -14,7 +15,7 @@ export async function getMovies() {
           "Content-Type": "application/json",
         },
         cache: "no-store",
-      },
+      }
     );
 
     if (!moviesResponse.ok) {
@@ -87,3 +88,59 @@ export async function createMovie(movie: WithoutId<Document>) {
     };
   }
 }
+
+export async function updateMovie(id: string, movie: WithoutId<Document>) {
+  try {
+    const result = await db
+      .collection("movies_new")
+      .updateOne(
+        { _id: ObjectId.createFromHexString(id) },
+        { $set: movie },
+        { upsert: false }
+      );
+
+    if (result.acknowledged) {
+      return {
+        success: true,
+        message: "Movie updated successfully",
+      };
+    } else {
+      return {
+        success: false,
+        message: "Failed to updated movie",
+      };
+    }
+  } catch (error) {
+    console.log("MongoDB insert error:", error);
+    return {
+      success: false,
+      message: "An error occurred while updating the movie",
+    };
+  }
+}
+
+export const deleteMovie = async (id: string) => {
+  try {
+    const result = await db
+      .collection("movies_new")
+      .deleteOne({ _id: ObjectId.createFromHexString(id) });
+
+    if (result.acknowledged) {
+      return {
+        success: true,
+        message: "Movie deleted successfully!",
+      };
+    } else {
+      return {
+        success: false,
+        message: "Failed to delete movie.",
+      };
+    }
+  } catch (error) {
+    console.log("MongoDB delete error:", error);
+    return {
+      success: false,
+      message: "An error occurred while deleting the movie.",
+    };
+  }
+};

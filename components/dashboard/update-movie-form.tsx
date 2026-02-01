@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Label } from "@/components/ui/label";
 import { Input } from "../ui/input";
@@ -17,9 +17,8 @@ import { getAllGenres, getAllStatuses, getAllYears } from "@/lib/utils";
 import { Textarea } from "../ui/textarea";
 import { DialogFooter } from "../ui/dialog";
 import { Button } from "../ui/button";
-import { createMovie } from "@/actions/movies";
+import { createMovie, updateMovie } from "@/actions/movies";
 import { WithId, WithoutId, Document } from "mongodb";
-import { title } from "process";
 
 type UpdateMovieFormProps = {
   showDialog: (value: boolean) => void;
@@ -30,7 +29,7 @@ export default function UpdateMovieForm({
   showDialog,
   movie,
 }: UpdateMovieFormProps) {
-  console.log("Movie", movie);
+  console.log("Movie from UpdateMovieForm", movie);
 
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -46,12 +45,14 @@ export default function UpdateMovieForm({
     backdrop: movie?.backdrop || "",
     status: movie?.status || "",
   });
-  console.log("state", formState);
   const years = getAllYears();
   const genres = getAllGenres();
   const statuses = getAllStatuses();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement> &
+      React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
     const target = e.target;
     const { name, value } = target;
     setFormState((prevState) => ({
@@ -64,14 +65,14 @@ export default function UpdateMovieForm({
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
-    const movie: WithoutId<Document> = {
+    const movieDoc: WithoutId<Document> = {
       title: formData.get("title"),
       year: formData.get("year"),
       directors: [formData.get("director")],
       genres: [formData.get("genre")],
       imdb: { rating: Number(formData.get("rating")) },
       runtime: formData.get("runtime"),
-      plot: formData.get("description"),
+      plot: formData.get("overview"),
       poster: formData.get("poster"),
       backdrop: formData.get("backdrop"),
       status: formData.get("status"),
@@ -81,7 +82,7 @@ export default function UpdateMovieForm({
     setIsSubmitting(true);
 
     try {
-      const response = await createMovie(movie);
+      const response = await updateMovie(movie?.id, movieDoc);
 
       if (response.success) {
         router.refresh();
@@ -209,12 +210,13 @@ export default function UpdateMovieForm({
       <div className=" space-y-2">
         <Label htmlFor="description">Description</Label>
         <Textarea
-          id="description"
-          name="description"
+          id="overview"
+          name="overview"
           placeholder="Movie description"
           value={formState.overview}
           onChange={handleChange}
           className=" h-[6.25rem]"
+          required
         />
       </div>
 
