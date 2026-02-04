@@ -45,11 +45,13 @@ export const registerUser = async (_: unknown, formData: FormData) => {
         field: "general",
       };
     } catch (error) {
-      console.error("Error registering user:", error.message);
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
+      console.error("Error registering user:", errorMessage);
 
       return {
         success: false,
-        message: error.message || "User registration failed.",
+        message: errorMessage || "User registration failed.",
         field: "general",
       };
     }
@@ -90,11 +92,15 @@ export const loginUser = async (_: unknown, formData: FormData) => {
         field: "general",
       };
     } catch (error) {
-      console.error("Error logging in user:", error);
+      let errorMessage = "Login failed.";
+      if (error instanceof Error) {
+        errorMessage = error.message || errorMessage;
+      }
+      console.error("Error logging in user:", errorMessage);
 
       return {
         success: false,
-        message: error.message || "Login failed.",
+        message: errorMessage,
         field: "general",
       };
     }
