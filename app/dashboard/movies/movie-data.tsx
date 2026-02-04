@@ -1,5 +1,5 @@
 import { searchMovies } from "@/actions/movies";
-import { MoviesTable } from "./movies-table";
+import { MovieTable } from "./movie-table";
 
 type MovieDataProps = {
   query?: string;
@@ -7,10 +7,12 @@ type MovieDataProps = {
 
 export default async function MovieData({ query = "" }: MovieDataProps) {
   try {
-    // fetch movies data from the server
-    const { success, data } = await searchMovies(query);
+    // Fetch movies data from the server
+    const { data, success } = await searchMovies(query);
 
     if (!success) throw new Error("No movies found in the database.");
+
+    // console.log("Movies fetched:", data);
 
     const refinedData = data.map((movie) => ({
       id: movie._id.toString(),
@@ -27,7 +29,7 @@ export default async function MovieData({ query = "" }: MovieDataProps) {
       directors: movie.directors,
     }));
 
-    return <MoviesTable movies={refinedData} />;
+    return <MovieTable movies={refinedData} />;
   } catch {
     return <div>No Movies Available!</div>;
   }

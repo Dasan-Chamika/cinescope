@@ -1,8 +1,8 @@
 "use client";
 
 import { useActionState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,7 +15,6 @@ import {
 import {
   Field,
   FieldDescription,
-  FieldError,
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
@@ -27,13 +26,13 @@ export function RegisterForm({
   ...props
 }: React.ComponentProps<"div">) {
   const router = useRouter();
-
   const [state, formAction, isPending] = useActionState(registerUser, {
     success: null,
     message: null,
     field: null,
   });
-  console.log("Registration state", state, "isPending", isPending);
+
+  // console.log("Registration state:", state, "isPending:", isPending);
 
   useEffect(() => {
     if (state) {
@@ -49,7 +48,7 @@ export function RegisterForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle className=" text-lg capitalize">
+          <CardTitle className="text-lg capitalize">
             Create your account
           </CardTitle>
           <CardDescription>
@@ -58,7 +57,7 @@ export function RegisterForm({
         </CardHeader>
         <CardContent>
           <form action={formAction}>
-            <FieldGroup className=" gap-4">
+            <FieldGroup className="gap-4">
               <Field>
                 <FieldLabel htmlFor="name">Name</FieldLabel>
                 <Input
@@ -66,10 +65,8 @@ export function RegisterForm({
                   name="name"
                   type="text"
                   placeholder="John Doe"
+                  required
                 />
-                <FieldError className=" text-xs">
-                  {state?.field === "name" ? state.message : null}
-                </FieldError>
               </Field>
               <Field>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
@@ -78,38 +75,30 @@ export function RegisterForm({
                   name="email"
                   type="email"
                   placeholder="john.doe@email.com"
+                  required
                 />
-                <FieldError className=" text-xs">
-                  {state?.field === "email" ? state.message : null}
-                </FieldError>
               </Field>
               <Field>
                 <FieldLabel htmlFor="password">Password</FieldLabel>
-                <Input id="password" name="password" type="password" />
-                <FieldError className=" text-xs">
-                  {state?.field === "password" ? state.message : null}
-                </FieldError>
+                <Input id="password" name="password" type="password" required />
               </Field>
               <Field>
-                <FieldError
-                  className={cn(
-                    " text-xs text-center",
-                    state?.success ? "text-green-600" : "text-red-600"
-                  )}
-                >
-                  {state?.field === "general" ? state.message : null}
-                </FieldError>
                 <Button
                   type="submit"
-                  className=" cursor-pointer"
+                  className="cursor-pointer"
                   disabled={isPending}
                 >
-                  {isPending ? "Registering" : "Register"}
+                  Register
                 </Button>
-                <Button variant="outline" type="button" disabled>
+                <Button
+                  variant="outline"
+                  type="button"
+                  className="cursor-pointer"
+                  disabled
+                >
                   Continue with Google
                 </Button>
-                <FieldDescription className="text-center cursor-pointer">
+                <FieldDescription className="text-center">
                   Already have an account? <Link href="/login">Login</Link>
                 </FieldDescription>
               </Field>

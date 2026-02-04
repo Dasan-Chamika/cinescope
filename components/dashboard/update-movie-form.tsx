@@ -1,26 +1,25 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
+import type { WithId, Document } from "mongodb";
 import { Label } from "@/components/ui/label";
-import { Input } from "../ui/input";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
-  // SelectGroup,
+  SelectGroup,
   SelectItem,
-  //   SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { DialogFooter } from "@/components/ui/dialog";
 import { getAllGenres, getAllStatuses, getAllYears } from "@/lib/utils";
-import { Textarea } from "../ui/textarea";
-import { DialogFooter } from "../ui/dialog";
-import { Button } from "../ui/button";
-import { createMovie, updateMovie } from "@/actions/movies";
-import { WithId, WithoutId, Document } from "mongodb";
+import { Button } from "@/components/ui/button";
+import { updateMovie } from "@/actions/movies";
 
-type UpdateMovieFormProps = {
+type AddMovieFormProps = {
   showDialog: (value: boolean) => void;
   movie?: WithId<Document>;
 };
@@ -28,9 +27,8 @@ type UpdateMovieFormProps = {
 export default function UpdateMovieForm({
   showDialog,
   movie,
-}: UpdateMovieFormProps) {
-  console.log("Movie from UpdateMovieForm", movie);
-
+}: AddMovieFormProps) {
+  // console.log("Movie in UpdateMovieForm:", movie);
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formState, setFormState] = useState({
@@ -53,19 +51,18 @@ export default function UpdateMovieForm({
     e: React.ChangeEvent<HTMLInputElement> &
       React.ChangeEvent<HTMLTextAreaElement>
   ) => {
-    const target = e.target;
-    const { name, value } = target;
+    const { name, value } = e.target;
     setFormState((prevState) => ({
       ...prevState,
       [name]: value,
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
 
-    const movieDoc: WithoutId<Document> = {
+    const movieDoc = {
       title: formData.get("title"),
       year: formData.get("year"),
       directors: [formData.get("director")],
@@ -82,7 +79,7 @@ export default function UpdateMovieForm({
     setIsSubmitting(true);
 
     try {
-      const response = await updateMovie(movie?.id, movieDoc);
+      const response = await updateMovie(movie.id, movieDoc);
 
       if (response.success) {
         router.refresh();
@@ -96,11 +93,11 @@ export default function UpdateMovieForm({
   };
 
   return (
-    <form className=" space-y-4" onSubmit={handleSubmit}>
+    <form className="space-y-4" onSubmit={handleSubmit}>
       <div className="grid grid-cols-2 gap-4">
-        <div className=" space-y-2">
+        <div className="space-y-2">
           <Label htmlFor="title">
-            Title <span className="text-red-500">*</span>
+            Title<span className="text-red-500">*</span>
           </Label>
           <Input
             id="title"
@@ -112,9 +109,9 @@ export default function UpdateMovieForm({
             required
           />
         </div>
-        <div className=" space-y-2">
+        <div className="space-y-2">
           <Label htmlFor="year">
-            Year <span className="text-red-500">*</span>
+            Year<span className="text-red-500">*</span>
           </Label>
           <Select
             name="year"
@@ -136,70 +133,72 @@ export default function UpdateMovieForm({
             </SelectContent>
           </Select>
         </div>
-        <div className=" space-y-2">
+        <div className="space-y-2">
           <Label htmlFor="director">Director</Label>
           <Input
             id="director"
             name="director"
             type="text"
-            placeholder="Movie director"
+            placeholder="Director name"
             value={formState.director}
             onChange={handleChange}
           />
         </div>
-        <div className=" space-y-2">
+        <div className="space-y-2">
           <Label htmlFor="genre">
-            Genre <span className="text-red-500">*</span>
+            Genre<span className="text-red-500">*</span>
           </Label>
           <Select
             name="genre"
             required
+            value={formState.genre}
             onValueChange={(value) =>
               setFormState((prev) => ({ ...prev, genre: value }))
             }
-            value={formState.genre}
           >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Please select genre" />
             </SelectTrigger>
             <SelectContent>
-              {genres.map((genre, index) => (
-                <SelectItem key={`${genre}-${index}`} value={genre}>
-                  {genre}
-                </SelectItem>
-              ))}
+              <SelectGroup>
+                {genres.map((genre, index) => (
+                  <SelectItem key={`${genre}-${index}`} value={genre}>
+                    {genre}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
             </SelectContent>
           </Select>
         </div>
-        <div className=" space-y-2">
+        <div className="space-y-2">
           <Label htmlFor="rating">
-            IMDb Rating <span className="text-red-500">*</span>
+            IMDb Rating<span className="text-red-500">*</span>
           </Label>
           <Input
             id="rating"
             name="rating"
             type="number"
-            step="0.1"
+            placeholder="IMDb Rating (0-10)"
             min="0"
             max="10"
-            placeholder="IMDB Rating (0-10)"
+            step="0.1"
             value={formState.rating}
             onChange={handleChange}
             required
           />
         </div>
-        <div className=" space-y-2">
+        <div className="space-y-2">
           <Label htmlFor="runtime">
-            Runtime <span className="text-red-500">*</span>
+            Runtime<span className="text-red-500">*</span>
           </Label>
           <Input
             id="runtime"
             name="runtime"
-            type="number"
-            step="1"
-            min="0"
-            max="1000"
             placeholder="Runtime in minutes"
+            type="number"
+            max="1000"
+            min="0"
+            step="1"
             value={formState.runtime}
             onChange={handleChange}
             required
@@ -207,23 +206,23 @@ export default function UpdateMovieForm({
         </div>
       </div>
 
-      <div className=" space-y-2">
-        <Label htmlFor="description">Description</Label>
+      <div className="space-y-2">
+        <Label htmlFor="overview">Overview</Label>
         <Textarea
           id="overview"
           name="overview"
           placeholder="Movie description"
+          className="h-[6.25rem]"
           value={formState.overview}
           onChange={handleChange}
-          className=" h-[6.25rem]"
           required
         />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className=" space-y-2">
+        <div className="space-y-2">
           <Label htmlFor="poster">
-            Poster URL <span className="text-red-500">*</span>
+            Poster URL<span className="text-red-500">*</span>
           </Label>
           <Input
             id="poster"
@@ -232,11 +231,12 @@ export default function UpdateMovieForm({
             placeholder="URL to movie poster image"
             value={formState.poster}
             onChange={handleChange}
+            required
           />
         </div>
-        <div className=" space-y-2">
+        <div className="space-y-2">
           <Label htmlFor="backdrop">
-            Backdrop URL <span className="text-red-500">*</span>
+            <span className="text-red-500">*</span>Backdrop URL
           </Label>
           <Input
             id="backdrop"
@@ -248,17 +248,18 @@ export default function UpdateMovieForm({
             required
           />
         </div>
-        <div className=" space-y-2">
+
+        <div className="space-y-2">
           <Label htmlFor="status">
-            Status <span className="text-red-500">*</span>
+            Status<span className="text-red-500">*</span>
           </Label>
           <Select
             name="status"
             required
+            value={formState.status}
             onValueChange={(value) =>
               setFormState((prev) => ({ ...prev, status: value }))
             }
-            value={formState.status}
           >
             <SelectTrigger className="w-full capitalize">
               <SelectValue placeholder="Please select status" />
@@ -268,7 +269,7 @@ export default function UpdateMovieForm({
                 <SelectItem
                   key={`${status}-${index}`}
                   value={status}
-                  className=" capitalize"
+                  className="capitalize"
                 >
                   {status}
                 </SelectItem>

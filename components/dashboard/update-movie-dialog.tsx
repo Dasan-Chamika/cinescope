@@ -1,5 +1,6 @@
 "use client";
 
+import type { WithId, Document } from "mongodb";
 import {
   Dialog,
   DialogContent,
@@ -8,7 +9,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import UpdateMovieForm from "./update-movie-form";
-import { WithId, Document } from "mongodb";
 
 type UpdateMovieDialogProps = {
   open: boolean;

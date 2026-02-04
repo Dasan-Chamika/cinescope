@@ -1,7 +1,7 @@
-import UserNav from "@/components/dashboard/user-nav";
 import { auth } from "@/lib/auth";
-import { redirect } from "next/navigation";
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+import { UserNav } from "@/components/dashboard/user-nav";
 
 export default async function AdminHeader() {
   const session = await auth.api.getSession({
@@ -25,9 +25,9 @@ export default async function AdminHeader() {
   console.log("User session:", session);
 
   return (
-    <header className=" sticky top-0 z-50 bg-background border-b">
-      <div className=" flex h-16 items-center justify-between px-4">
-        <h1 className=" text-xl font-bold ">Admin Dashboard</h1>
+    <header className="sticky top-0 z-50 border-b bg-background">
+      <div className="flex h-16 items-center justify-between px-4">
+        <h1 className="text-xl font-bold">Admin Dashboard</h1>
 
         {/* User Navigation */}
         <UserNav handleLogout={handleLogout} user={session.user} />

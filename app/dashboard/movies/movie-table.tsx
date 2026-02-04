@@ -2,17 +2,17 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Badge } from "@/components/ui/badge";
+import { MoreHorizontalIcon } from "lucide-react";
 import {
   Table,
   TableBody,
   TableCaption,
   TableCell,
-  //   TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,21 +21,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-// import { Movie } from "./type";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontalIcon } from "lucide-react";
-import { MovieThumbnails } from "./movie-thumbnail";
-import { Movie } from "@/lib/type";
+import { MovieThumbnail } from "./movie-thumbnail";
+import type { Movie } from "./type";
 import UpdateMovieDialog from "@/components/dashboard/update-movie-dialog";
 import { DeleteMovieDialog } from "@/components/dashboard/delete-movie-dialog";
 import { deleteMovie } from "@/actions/movies";
 import { cn } from "@/lib/utils";
 
-type MoviesTableProps = {
+type MovieTableProps = {
   movies: Movie[];
 };
 
-export function MoviesTable({ movies }: MoviesTableProps) {
+export function MovieTable({ movies }: MovieTableProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
@@ -68,11 +66,11 @@ export function MoviesTable({ movies }: MoviesTableProps) {
   };
 
   return (
-    <div className=" rounded-md border">
+    <div className="rounded-md border">
       <Table>
         <TableCaption className="sr-only">Admin Movies Table</TableCaption>
         <TableHeader>
-          <TableRow>
+          <TableRow className="text-muted-foreground">
             <TableHead className="w-[80px] text-muted-foreground">#</TableHead>
             <TableHead className="text-muted-foreground">Title</TableHead>
             <TableHead className="text-muted-foreground">Year</TableHead>
@@ -89,9 +87,9 @@ export function MoviesTable({ movies }: MoviesTableProps) {
             <TableRow key={`${movie.id}-${key}`}>
               <TableCell className="font-medium">{key + 1}</TableCell>
               <TableCell>
-                <div className=" flex items-center gap-2">
-                  <MovieThumbnails poster={movie.poster} title={movie.title} />
-                  <span className=" font-medium max-w-60 text-wrap line-clamp-2">
+                <div className="flex items-center gap-2">
+                  <MovieThumbnail poster={movie.poster} title={movie.title} />
+                  <span className="font-medium max-w-60 text-wrap line-clamp-2">
                     {movie.title}
                   </span>
                 </div>
@@ -99,11 +97,11 @@ export function MoviesTable({ movies }: MoviesTableProps) {
               <TableCell>{movie.year}</TableCell>
               <TableCell>
                 <div className="flex flex-wrap gap-1">
-                  {movie.genres.map((genre) => (
+                  {movie.genres.map((genre, key) => (
                     <Badge
-                      key={genre}
+                      key={`genre-${key}`}
                       variant="outline"
-                      className=" text-xs rounded-md"
+                      className="text-xs rounded-md"
                     >
                       {genre}
                     </Badge>
@@ -116,7 +114,7 @@ export function MoviesTable({ movies }: MoviesTableProps) {
                   variant="outline"
                   className={cn(
                     "rounded-md capitalize",
-                    getStatusClass(movie.status)
+                    getStatusClass(movie.status),
                   )}
                 >
                   {movie.status ?? "published"}

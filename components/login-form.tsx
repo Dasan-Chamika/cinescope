@@ -15,9 +15,9 @@ import {
 import {
   Field,
   FieldDescription,
-  FieldError,
   FieldGroup,
   FieldLabel,
+  FieldError,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { loginUser } from "@/actions/auth";
@@ -27,13 +27,13 @@ export function LoginForm({
   ...props
 }: React.ComponentProps<"div">) {
   const router = useRouter();
-
   const [state, formAction, isPending] = useActionState(loginUser, {
     success: null,
     message: null,
     field: null,
   });
-  console.log("Login state", state, "isPending", isPending);
+
+  // console.log("Login state:", state, "isPending:", isPending);
 
   useEffect(() => {
     if (state) {
@@ -61,12 +61,13 @@ export function LoginForm({
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
                   id="email"
-                  type="email"
                   name="email"
+                  type="email"
                   placeholder="john.doe@email.com"
+                  // required
                 />
-                <FieldError className=" text-xs">
-                  {state?.field === "email" ? state.message : null}
+                <FieldError className="text-xs">
+                  {state?.field === "email" ? state?.message : null}
                 </FieldError>
               </Field>
               <Field>
@@ -79,22 +80,22 @@ export function LoginForm({
                     Forgot your password?
                   </a>
                 </div>
-                <Input id="password" type="password" name="password" />
-                <FieldError className=" text-xs">
-                  {state?.field === "password" ? state.message : null}
+                <Input id="password" name="password" type="password" />
+                <FieldError className="text-xs">
+                  {state?.field === "password" ? state?.message : null}
                 </FieldError>
               </Field>
               <Field>
                 <FieldError
                   className={cn(
-                    " text-xs text-center",
-                    state?.success ? "text-green-600" : "text-red-600"
+                    "text-xs text-center",
+                    state.success ? "text-green-600" : "text-red-600"
                   )}
                 >
-                  {state?.field === "general" ? state.message : null}
+                  {state?.field === "general" ? state?.message : null}
                 </FieldError>
                 <Button type="submit" disabled={isPending}>
-                  {isPending ? "Signing In" : "Sign In"}
+                  Login
                 </Button>
                 <Button variant="outline" type="button" disabled={isPending}>
                   Login with Google

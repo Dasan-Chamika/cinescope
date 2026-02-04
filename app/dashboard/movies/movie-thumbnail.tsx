@@ -1,13 +1,14 @@
 "use client";
-import { useState } from "react";
-import Image from "next/image";
 
-type MovieThumbnailsProps = {
-  poster?: string;
+import Image from "next/image";
+import { useState } from "react";
+
+type MovieThumbnailProps = {
+  poster: string;
   title: string;
 };
 
-export function MovieThumbnails({ poster, title }: MovieThumbnailsProps) {
+export function MovieThumbnail({ poster, title }: MovieThumbnailProps) {
   const [imgSrc, setImgSrc] = useState(poster ?? "/placeholder.svg");
 
   const handleError = () => {
@@ -20,7 +21,7 @@ export function MovieThumbnails({ poster, title }: MovieThumbnailsProps) {
       alt={title}
       width={28}
       height={40}
-      className=" rounded object-cover h-10"
+      className="h-10 rounded object-cover"
       onError={handleError}
     />
   );

@@ -2,9 +2,9 @@
 
 import { ObjectId } from "mongodb";
 import { db } from "@/db";
-import { WithoutId, Document } from "mongodb";
+import { MovieCreate } from "@/lib/type";
 
-// get a  list of movies from db
+// Get a list of movies from the database
 export async function getMovies() {
   try {
     const moviesResponse = await fetch(
@@ -13,9 +13,10 @@ export async function getMovies() {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          // Authorization: `Bearer ${process.env.API_KEY}`,
         },
         cache: "no-store",
-      }
+      },
     );
 
     if (!moviesResponse.ok) {
@@ -25,7 +26,7 @@ export async function getMovies() {
     if (moviesResponse.status === 200) {
       return await moviesResponse.json();
     } else {
-      console.error("No movies found or error occurred.");
+      console.log("No movies found or error occurred.");
       return [];
     }
   } catch (error) {
@@ -38,7 +39,7 @@ export async function searchMovies(query: string) {
   try {
     const movies = await db
       .collection("movies_new")
-      .find({ title: { $regex: query, $options: "i" } }) // case-insensitive search
+      .find({ title: { $regex: query, $options: "i" } }) // Case-insensitive search
       .limit(50)
       .toArray();
 
@@ -51,7 +52,7 @@ export async function searchMovies(query: string) {
     } else {
       return {
         success: false,
-        message: `No movies found matching "${query}".`,
+        message: "No movies found matching your query.",
         data: [],
       };
     }
@@ -65,56 +66,56 @@ export async function searchMovies(query: string) {
   }
 }
 
-export async function createMovie(movie: WithoutId<Document>) {
+export async function createMovie(movie: MovieCreate) {
   try {
     const result = await db.collection("movies_new").insertOne(movie);
 
     if (result.acknowledged) {
       return {
         success: true,
-        message: "Movie created successfully",
+        message: "Movie created successfully.",
       };
     } else {
       return {
         success: false,
-        message: "Failed to create movie",
+        message: "Failed to create movie.",
       };
     }
   } catch (error) {
     console.log("MongoDB insert error:", error);
     return {
       success: false,
-      message: "An error occurred while creating the movie",
+      message: "An error occurred while creating the movie.",
     };
   }
 }
 
-export async function updateMovie(id: string, movie: WithoutId<Document>) {
+export async function updateMovie(id: string, movie: MovieCreate) {
   try {
     const result = await db
       .collection("movies_new")
       .updateOne(
         { _id: ObjectId.createFromHexString(id) },
         { $set: movie },
-        { upsert: false }
+        { upsert: false },
       );
 
     if (result.acknowledged) {
       return {
         success: true,
-        message: "Movie updated successfully",
+        message: "Movie updated successfully.",
       };
     } else {
       return {
         success: false,
-        message: "Failed to updated movie",
+        message: "Failed to update movie.",
       };
     }
   } catch (error) {
     console.log("MongoDB insert error:", error);
     return {
       success: false,
-      message: "An error occurred while updating the movie",
+      message: "An error occurred while updating the movie.",
     };
   }
 }

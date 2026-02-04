@@ -1,15 +1,15 @@
-// RSC - React Server Component
-// SSR - Enabled by default import MainNav from "@/components/main-nav";
-
-import FeaturedMovies from "@/components/landing/featured-movies";
-import HeroBanner from "@/components/landing/hero-banner";
 import { MainNav } from "@/components/main-nav";
+import HeroBanner from "@/components/landing/hero-banner";
+import FeaturedMovies from "@/components/landing/featured-movies";
 import Footer from "@/components/shared/footer";
+
+// RSC - React Server Component
+// SSR - Enabled by default
 export default function HomePage() {
   return (
-    <div className=" min-h-screen flex flex-col relative">
+    <div className="flex flex-col min-h-screen">
       <MainNav />
-      <main className="">
+      <main className="flex-1">
         <HeroBanner />
         <FeaturedMovies />
       </main>

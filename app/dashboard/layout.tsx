@@ -9,7 +9,7 @@ export default function DashboardLayout({
 }>) {
   return (
     <SidebarProvider>
-      {/* 1. Sidebar Section*/}
+      {/* 1. Sidebar Section */}
       <AdminSidebar />
 
       {/* 2. Main Content Area */}

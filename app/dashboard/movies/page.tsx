@@ -4,7 +4,7 @@ import AddMovieDialog from "@/components/dashboard/add-movie-dialog";
 
 type MoviesDashboardPageProps = {
   searchParams: Promise<{
-    q?: string;
+    q: string;
   }>;
 };
 
@@ -12,14 +12,14 @@ export default async function MoviesDashboardPage(
   props: MoviesDashboardPageProps,
 ) {
   const searchParams = await props.searchParams;
-  const query = searchParams?.q ?? "";
+  const query = searchParams.q || "";
 
   return (
     <div className="space-y-4">
-      <div className=" flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <div>
-          <h2 className=" text-3xl font-bold tracking-tight">Movies</h2>
-          <p className=" text-muted-foreground">Manage your movie catalog</p>
+          <h2 className="text-3xl font-bold tracking-tight">Movies</h2>
+          <p className="text-muted-foreground">Manage your movie catalog</p>
         </div>
 
         <AddMovieDialog />
@@ -28,7 +28,7 @@ export default async function MoviesDashboardPage(
       {/* Movie Selectors */}
       <MovieSelectors />
 
-      {/* Movie data Table */}
+      {/* Movie Data Table */}
       <MovieData query={query} />
     </div>
   );

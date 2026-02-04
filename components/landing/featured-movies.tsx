@@ -6,13 +6,13 @@ export default function FeaturedMovies() {
   return (
     <section
       id="featured-movies"
-      className=" container px-4 py-12 md:px-6 w-full"
+      className="container px-4 py-12 md:px-6 w-full"
     >
       {/* Heading area */}
-      <div className=" mb-8 flex items-center justify-between">
+      <div className="mb-8 flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">Featured Movies</h2>
-          <p className=" text-muted-foreground">
+          <p className="text-muted-foreground">
             Explore the latest and greatest movies that are making waves in the
             cinema world.
           </p>
@@ -23,7 +23,8 @@ export default function FeaturedMovies() {
 
       <div className="space-y-6">
         {/* Movie Search Filter */}
-        <div className=" w-full h-[122px] bg-purple-400 rounded-lg mb-6"></div>
+        <div className="w-full h-[122px] bg-purple-400 rounded-lg"></div>
+
         {/* Movies List */}
         <Suspense fallback={<MoviesListSkeleton />}>
           <MoviesList />

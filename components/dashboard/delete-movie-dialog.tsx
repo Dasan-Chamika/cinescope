@@ -1,3 +1,4 @@
+import type { WithId, Document } from "mongodb";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -8,7 +9,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { WithId, Document } from "mongodb";
 
 type DeleteMovieDialogProps = {
   open: boolean;
@@ -29,14 +29,14 @@ export function DeleteMovieDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="text-center">Delete Movie</DialogTitle>
-          <DialogDescription className=" text-sm text-gray-500 my-5 text-center text-balance">
-            Are you sure you want to delete this movie?{" "}
+          <DialogTitle>Delete Movie</DialogTitle>
+          <DialogDescription className="text-sm text-gray-500 my-5 text-center text-balance">
+            Are you sure you want to delete the movie?{" "}
             <strong>
               {movie?.title ?? "N/A"} ({movie?.year ?? "N/A"})
             </strong>
             <br />
-            <span className=" text-xs text-orange-600">
+            <span className="text-xs text-orange-400">
               This action cannot be undone.
             </span>
           </DialogDescription>
@@ -49,10 +49,10 @@ export function DeleteMovieDialog({
           </DialogClose>
           <Button
             variant="destructive"
-            onClick={() => onConfirmDelete?.(movie.id)}
+            onClick={() => onConfirmDelete(movie?.id)}
             disabled={isLoading}
           >
-            {isLoading ? "Deleting..." : "Delete"}
+            Delete
           </Button>
         </DialogFooter>
       </DialogContent>

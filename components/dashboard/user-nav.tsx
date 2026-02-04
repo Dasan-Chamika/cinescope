@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { LogOutIcon, SettingsIcon, UserIcon } from "lucide-react";
+import { UserIcon, SettingsIcon, LogOutIcon } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,9 +11,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-type userNavProps = {
+type UserNavProps = {
   handleLogout: () => void;
   user: {
     id: string;
@@ -21,26 +21,26 @@ type userNavProps = {
     email: string;
     emailVerified: boolean;
     name: string;
-    image?: string | null | undefined;
+    image?: string;
   };
 };
 
-export default function UserNav({ handleLogout, user }: userNavProps) {
+export function UserNav({ handleLogout, user }: UserNavProps) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className=" focus-visible:ring-0!" asChild>
-        <Avatar className=" h-10 w-10 border-2 border-primary">
-          <AvatarImage src="/admin.jpg" alt="@admin" />
+      <DropdownMenuTrigger className="focus-visible:ring-0" asChild>
+        <Avatar className="h-10 w-10 border-2 border-primary">
+          <AvatarImage src="/admin.jpeg" alt="@admin" />
           <AvatarFallback>HS</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className=" w-56" align="end" forceMount>
-        <DropdownMenuLabel>
-          <div className=" flex flex-col space-y-1">
-            <p className=" text-sm font-medium leading-none text-nowrap truncate">
-              {user.name !== "" ? user.name : "Guest user"}
+      <DropdownMenuContent className="w-56" align="end" forceMount>
+        <DropdownMenuLabel className="font-normal">
+          <div className="flex flex-col space-y-1">
+            <p className="text-sm font-medium leading-none text-nowrap truncate">
+              {user.name !== "" ? user.name : "Guest User"}
             </p>
-            <p className=" text-muted-foreground text-xs leading-none">
+            <p className="text-muted-foreground text-xs leading-none">
               {user.email !== "" ? user.email : "No email address"}
             </p>
           </div>
@@ -48,20 +48,20 @@ export default function UserNav({ handleLogout, user }: userNavProps) {
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link href="/dashboard/profile">
-            <UserIcon className=" mr-1 h-4 w-4" />
+            <UserIcon className="mr-2 h-4 w-4" />
             <span>Profile</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href="/dashboard/settings">
-            <SettingsIcon className=" mr-1 h-4 w-4" />
+            <SettingsIcon className="mr-2 h-4 w-4" />
             <span>Settings</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogout}>
-          <LogOutIcon className=" mr-1 h-4 w-4" />
-          <span>Log Out</span>
+          <LogOutIcon className="mr-2 h-4 w-4" />
+          <span>Logout</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

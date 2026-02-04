@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { PlusIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -9,8 +11,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { PlusIcon } from "lucide-react";
 import AddMovieForm from "./add-movie-form";
 
 export default function AddMovieDialog() {
@@ -28,7 +28,7 @@ export default function AddMovieDialog() {
         <DialogHeader>
           <DialogTitle>Add New Movie</DialogTitle>
           <DialogDescription>
-            Fill in the details below to add a new movie to your catalog.
+            Fill in the details to add a new movie to your catalog.
           </DialogDescription>
         </DialogHeader>
         <AddMovieForm showDialog={setShowAddMovieDialog} />

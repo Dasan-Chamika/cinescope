@@ -9,14 +9,13 @@ export default function Counter() {
   // User Related Local State
   const [age, setAge] = useState(28);
   const [name, setName] = useState("Taylor");
-  // eslint-disable-next-line react-hooks/immutability
   const [todos, setTodos] = useState(() => createTodos());
 
   function createTodos() {
     return ["Reading a Book", "Watching a Movie"];
   }
 
-  function handleUpdate() {
+  async function handleUpdate() {
     setAge((prevVal) => prevVal + 5);
     setName("John");
     setTodos(["Practice Swimming, Go to School"]);

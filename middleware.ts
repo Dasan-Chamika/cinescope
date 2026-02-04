@@ -7,7 +7,7 @@ export async function middleware(request: NextRequest) {
     headers: await headers(),
   });
 
-  console.log("SESSION::", session);
+  // console.log("SESSION::", session);
 
   if (!session) {
     return NextResponse.redirect(new URL("/login", request.url));
@@ -20,5 +20,3 @@ export const config = {
   runtime: "nodejs", // Node.js runtime for better auth compatibility
   matcher: ["/dashboard/:path*", "/profile/:path*"],
 };
-
-// middleware is in between client and server

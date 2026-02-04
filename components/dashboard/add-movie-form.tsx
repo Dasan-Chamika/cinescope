@@ -3,22 +3,20 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Label } from "@/components/ui/label";
-import { Input } from "../ui/input";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
-  // SelectGroup,
+  SelectGroup,
   SelectItem,
-  //   SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { DialogFooter } from "@/components/ui/dialog";
 import { getAllGenres, getAllStatuses, getAllYears } from "@/lib/utils";
-import { Textarea } from "../ui/textarea";
-import { DialogFooter } from "../ui/dialog";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { createMovie } from "@/actions/movies";
-import { WithoutId, Document } from "mongodb";
 
 type AddMovieFormProps = {
   showDialog: (value: boolean) => void;
@@ -31,18 +29,19 @@ export default function AddMovieForm({ showDialog }: AddMovieFormProps) {
   const genres = getAllGenres();
   const statuses = getAllStatuses();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    // const data = Object.fromEntries(formData.entries());
 
-    const movie: WithoutId<Document> = {
+    const movie = {
       title: formData.get("title"),
       year: formData.get("year"),
       directors: [formData.get("director")],
       genres: [formData.get("genre")],
       imdb: { rating: Number(formData.get("rating")) },
       runtime: formData.get("runtime"),
-      plot: formData.get("description"),
+      plot: formData.get("overview"),
       poster: formData.get("poster"),
       backdrop: formData.get("backdrop"),
       status: formData.get("status"),
@@ -66,11 +65,11 @@ export default function AddMovieForm({ showDialog }: AddMovieFormProps) {
   };
 
   return (
-    <form className=" space-y-4" onSubmit={handleSubmit}>
+    <form className="space-y-4" onSubmit={handleSubmit}>
       <div className="grid grid-cols-2 gap-4">
-        <div className=" space-y-2">
+        <div className="space-y-2">
           <Label htmlFor="title">
-            Title <span className="text-red-500">*</span>
+            Title<span className="text-red-500">*</span>
           </Label>
           <Input
             id="title"
@@ -80,9 +79,9 @@ export default function AddMovieForm({ showDialog }: AddMovieFormProps) {
             required
           />
         </div>
-        <div className=" space-y-2">
+        <div className="space-y-2">
           <Label htmlFor="year">
-            Year <span className="text-red-500">*</span>
+            Year<span className="text-red-500">*</span>
           </Label>
           <Select name="year" required>
             <SelectTrigger className="w-full">
@@ -97,89 +96,92 @@ export default function AddMovieForm({ showDialog }: AddMovieFormProps) {
             </SelectContent>
           </Select>
         </div>
-        <div className=" space-y-2">
+        <div className="space-y-2">
           <Label htmlFor="director">Director</Label>
           <Input
             id="director"
             name="director"
             type="text"
-            placeholder="Movie director"
+            placeholder="Director"
           />
         </div>
-        <div className=" space-y-2">
+        <div className="space-y-2">
           <Label htmlFor="genre">
-            Genre <span className="text-red-500">*</span>
+            Genre<span className="text-red-500">*</span>
           </Label>
           <Select name="genre" required>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Please select genre" />
             </SelectTrigger>
             <SelectContent>
-              {genres.map((genre, index) => (
-                <SelectItem key={`${genre}-${index}`} value={genre}>
-                  {genre}
-                </SelectItem>
-              ))}
+              <SelectGroup>
+                {genres.map((genre, index) => (
+                  <SelectItem key={`${genre}-${index}`} value={genre}>
+                    {genre}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
             </SelectContent>
           </Select>
         </div>
-        <div className=" space-y-2">
+        <div className="space-y-2">
           <Label htmlFor="rating">
-            IMDb Rating <span className="text-red-500">*</span>
+            IMDb Rating<span className="text-red-500">*</span>
           </Label>
           <Input
             id="rating"
             name="rating"
             type="number"
-            step="0.1"
+            placeholder="IMDb Rating (0-10)"
             min="0"
             max="10"
-            placeholder="IMDB Rating (0-10)"
+            step="0.1"
             required
           />
         </div>
-        <div className=" space-y-2">
+        <div className="space-y-2">
           <Label htmlFor="runtime">
-            Runtime <span className="text-red-500">*</span>
+            Runtime<span className="text-red-500">*</span>
           </Label>
           <Input
             id="runtime"
             name="runtime"
-            type="number"
-            step="1"
-            min="0"
-            max="1000"
             placeholder="Runtime in minutes"
+            type="number"
+            max="1000"
+            min="0"
+            step="1"
             required
           />
         </div>
       </div>
 
-      <div className=" space-y-2">
-        <Label htmlFor="description">Description</Label>
+      <div className="space-y-2">
+        <Label htmlFor="overview">Overview</Label>
         <Textarea
-          id="description"
-          name="description"
+          id="overview"
+          name="overview"
           placeholder="Movie description"
-          className=" h-[6.25rem]"
+          className="h-[6.25rem]"
         />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className=" space-y-2">
+        <div className="space-y-2">
           <Label htmlFor="poster">
-            Poster URL <span className="text-red-500">*</span>
+            Poster URL<span className="text-red-500">*</span>
           </Label>
           <Input
             id="poster"
             name="poster"
             type="url"
             placeholder="URL to movie poster image"
+            required
           />
         </div>
-        <div className=" space-y-2">
+        <div className="space-y-2">
           <Label htmlFor="backdrop">
-            Backdrop URL <span className="text-red-500">*</span>
+            <span className="text-red-500">*</span>Backdrop URL
           </Label>
           <Input
             id="backdrop"
@@ -189,9 +191,10 @@ export default function AddMovieForm({ showDialog }: AddMovieFormProps) {
             required
           />
         </div>
-        <div className=" space-y-2">
+
+        <div className="space-y-2">
           <Label htmlFor="status">
-            Status <span className="text-red-500">*</span>
+            Status<span className="text-red-500">*</span>
           </Label>
           <Select name="status" required>
             <SelectTrigger className="w-full capitalize">
@@ -202,7 +205,7 @@ export default function AddMovieForm({ showDialog }: AddMovieFormProps) {
                 <SelectItem
                   key={`${status}-${index}`}
                   value={status}
-                  className=" capitalize"
+                  className="capitalize"
                 >
                   {status}
                 </SelectItem>

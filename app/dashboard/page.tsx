@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -11,6 +12,16 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
+  const handleLogout = async () => {
+    "use server";
+
+    await auth.api.signOut({
+      headers: await headers(),
+    });
+
+    redirect("/login");
+  };
+
   // console.log("User session:", session);
 
   return (
@@ -21,6 +32,8 @@ export default async function DashboardPage() {
       <h2 className="text-xl font-semibold text-center pb-4">
         Welcome, {session.user.name || "User"}!
       </h2>
+
+      <Button onClick={handleLogout}>Logout</Button>
     </main>
   );
 }

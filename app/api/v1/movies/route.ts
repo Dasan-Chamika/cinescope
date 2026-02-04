@@ -8,7 +8,7 @@ export const GET = async () => {
     const movies = await db
       .collection("movies")
       .find()
-      //   .sort({ metacritic: -1 })
+      // .sort({ metacritic: -1 })
       .limit(50)
       .toArray()
       .catch((err) => {
@@ -17,7 +17,7 @@ export const GET = async () => {
       });
     return NextResponse.json(movies);
   } catch (error) {
-    console.error("Error fetching movies from db:", error);
+    console.error("Error fetching movies from database:", error);
     return NextResponse.json(
       { error: "Failed to fetch movies" },
       { status: 500 }
