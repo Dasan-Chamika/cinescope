@@ -34,7 +34,7 @@ export const registerUser = async (_: unknown, formData: FormData) => {
 
     try {
       const response = await auth.api.signUpEmail({
-        body: { email, password, name, image: null },
+        body: { email, password, name, image: undefined },
       });
 
       console.log("Registration response:", response);
