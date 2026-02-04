@@ -3,15 +3,16 @@ import MovieData from "./movie-data";
 import AddMovieDialog from "@/components/dashboard/add-movie-dialog";
 
 type MoviesDashboardPageProps = {
-  searchParams: {
+  searchParams: Promise<{
     q?: string;
-  };
+  }>;
 };
 
-export default async function MoviesDashboardPage({
-  searchParams,
-}: MoviesDashboardPageProps) {
-  const query = searchParams?.q || "";
+export default async function MoviesDashboardPage(
+  props: MoviesDashboardPageProps,
+) {
+  const searchParams = await props.searchParams;
+  const query = searchParams?.q ?? "";
 
   return (
     <div className="space-y-4">

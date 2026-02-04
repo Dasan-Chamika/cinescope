@@ -1,6 +1,6 @@
 "use client";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useDeferredValue } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -18,26 +18,32 @@ export default function MovieSelectors() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
-  const isFirstRender = useRef(true);
+  // const isFirstRender = useRef(true);
 
-  const initialQuery = searchParams.get("q") || "";
-  const [searchTerm, setSearchTerm] = useState(initialQuery);
+  // const initialQueryRef = useRef(searchParams.get("q") ?? "");
+  // const [searchTerm, setSearchTerm] = useState(initialQueryRef.current);
+
+  const [searchTerm, setSearchTerm] = useState(() => {
+    return searchParams.get("q") ?? "";
+  });
+  const deferredSearchTerm = useDeferredValue(searchTerm);
 
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
+    // if (isFirstRender.current) {
+    //   isFirstRender.current = false;
+    //   return;
+    // }
 
-    const params = new URLSearchParams(searchParams.toString());
-    if (searchTerm) {
-      params.set("q", searchTerm);
+    const params = new URLSearchParams();
+
+    if (deferredSearchTerm) {
+      params.set("q", deferredSearchTerm);
     } else {
       params.delete("q");
     }
 
     router.replace(`${pathname}?${params.toString()}`);
-  }, [searchTerm, searchParams, pathname, router]);
+  }, [deferredSearchTerm, pathname, router]);
 
   return (
     <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
