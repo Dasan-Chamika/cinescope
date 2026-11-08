@@ -7,6 +7,10 @@ CineScope is a personal web development project built with Next.js, React, and T
 
 [View CineScope](https://cinescope-olive-sigma.vercel.app/)
 
+## Application Preview
+
+![CineScope Dashboard](images/cinescope-dashboard.png)
+
 ## Overview
 
 CineScope is a movie dashboard application developed to explore modern frontend development, component-based interfaces, and application organization.
@@ -62,7 +66,9 @@ Some functionality may require environment configuration.
 
 ## Project Type
 
-Personal web development project focused on modern React application development and dashboard UI design.
+**Personal Portfolio Project**
+
+Developed to explore modern React application development, reusable UI components, and movie dashboard interface design.
 
 ## Developer
 
